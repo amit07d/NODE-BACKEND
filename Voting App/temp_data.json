@@ -1,0 +1,16 @@
+{
+    "name": "Amit Debnath",
+    "party": "jelly",
+    "age": "22",
+    "votes": [
+        {
+            "user": "64a1b60cfae2b02b4c7b12f6",
+            "votedAt": "2024-02-20T08:00:00.000Z"
+        },
+        {
+            "user": "64a1b60cfae2b02b4c7b12f7",
+            "votedAt":"2024-02-20T08:15:00.000Z"
+        }
+    ],
+    "voteCount": 2
+}
