@@ -33,7 +33,7 @@ const menuRoutes = require("./routes/menuRoutes");
 app.use("/menu", menuRoutes);
 
 const personRoutes = require("./routes/personRoutes");
-app.use("/person", localAuthMiddleware, personRoutes);
+app.use("/person", personRoutes);
 
 // Default 404 Route
 app.use((req, res) => {

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
+const{jwtAuthMiddleware, generateToken}= require('../jwt')
 
 const personSchema = new mongoose.Schema({
   name: {
