@@ -1,21 +1,19 @@
 const mongoose = require("mongoose");
-require('dotenv').config(); // Ensure that the .env file is loaded
+require("dotenv").config(); // Ensure that the .env file is loaded
 
 // MongoDB URL from environment variable
-//const mongoURL = process.env.MONGODB_URL_LOCAL; // Local connection string
+const mongoURL = process.env.MONGODB_URL_LOCAL; // Local connection string
 
 //MongoDB URL from online variable
-const mongoURL = process.env.MONGODB_URL
+//const mongoURL = process.env.MONGODB_URL
 
-// Check if the connection URL is defined
 if (!mongoURL) {
   console.error("MongoDB URL is undefined. Please check your .env file.");
   process.exit(1); // Exit if the MongoDB URL is missing
 }
 
-// Connect to MongoDB (no need for deprecated options)
-mongoose.connect(mongoURL)
-  .then(() => console.log("Connected to MongoDB"))
+mongoose
+  .connect(mongoURL)
   .catch((err) => console.error("MongoDB connection error:", err));
 
 const db = mongoose.connection;
