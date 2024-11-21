@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Person = require("./../models/Person");
-const { generateToken } = require("../jwt");
+const { generateToken, jwtAuthMiddleware } = require("../jwt");
 
 // Signup route
 router.post("/signup", async (req, res) => {
@@ -34,29 +34,28 @@ router.post("/signup", async (req, res) => {
 
 //Login route
 
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await Person.findOne({ username: username });
-    
+
     // If user is not found or password doesn't match, return an error
     if (!user || !(await user.comparePassword(password))) {
-      return res.status(401).json({ error: 'Invalid username or password' });
+      return res.status(401).json({ error: "Invalid username or password" });
     }
 
     const payload = {
       id: user.id,
-      username: user.username
+      username: user.username,
     };
     const token = generateToken(payload);
 
     res.json({ token });
-  } catch(error) {
+  } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 
 // Get all persons
 router.get("/", async (req, res) => {
@@ -70,10 +69,23 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/profile", jwtAuthMiddleware, async (req, res) => {
+  try {
+    const userData = req.user;
+    console.log("User Data:", userData);
+    const userId = userData.id;
+    const user = await Person.findById(userId);
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // Get persons by work type
 router.get("/:workType", async (req, res) => {
   try {
-    const workType = req.params.workType.trim().toLowerCase();  // Normalize to lowercase
+    const workType = req.params.workType.trim().toLowerCase(); // Normalize to lowercase
     const validWorkTypes = ["chef", "waiter", "manager"];
 
     if (validWorkTypes.includes(workType)) {
@@ -88,7 +100,6 @@ router.get("/:workType", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 
 // Update a person by ID
 router.put("/:id", async (req, res) => {
